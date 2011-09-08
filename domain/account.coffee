@@ -1,6 +1,6 @@
-Entity = require '../lib/entity'
+AggregateRoot = require '../lib/aggregate_root'
 
-class Account extends Entity
+class Account extends AggregateRoot
     id = 0
     name = {}
 
@@ -8,9 +8,14 @@ class Account extends Entity
         account = new Account()
         account.applyEvent 'AccountCreated', attrs
 
+    changeName: (n) ->
+        @applyEvent 'AccountNameChanged', { name: n }
+
     onAccountCreated: (event) ->
         id = event.attributes.id
         name = event.attributes.name
-        console.log "Account created: #{name}"
+
+    onAccountNameChanged: (event) ->
+        name = event.attributes.name
 
 module.exports = Account
