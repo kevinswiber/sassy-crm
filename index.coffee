@@ -1,8 +1,6 @@
-Account = require './domain/account'
-commands = require './commands'
+Command = require './lib/command'
+Bus = require './lib/bus'
 
-createAccountCommand = commands.createAccount 4, 'Super Company'
+createAccount = new Command 'CreateAccount', { id: 4, name: 'Super Company' }
 
-console.log createAccountCommand
-#account = new Account()
-#account.create { name: 'Super Company' }
+Bus.send createAccount
