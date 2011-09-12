@@ -1,21 +1,33 @@
 AggregateRoot = require '../lib/aggregate_root'
 
 class Account extends AggregateRoot
-    id = 0
-    name = {}
+    name = ''
+    state = ''
 
-    create: (attrs) ->
+    constructor: () ->
+        @on 'AccountCreated', (event) ->
+            @setId event.attributes.id
+            name = event.attributes.name
+            state = 'New'
+
+        @on 'AccountNameChanged', (event) ->
+            name = event.attributes.name
+
+        @on 'AccountDeactivated', (event) ->
+            state = 'Deactivated'
+
+    @create: (attributes) ->
+        attributes or= {}
+        attributes.id = @getNewId()
+
         account = new Account()
-        account.applyEvent 'AccountCreated', attrs
+        account.apply 'AccountCreated', attributes
+        account
 
     changeName: (n) ->
-        @applyEvent 'AccountNameChanged', { name: n }
+        @apply 'AccountNameChanged', { name: n }
 
-    onAccountCreated: (event) ->
-        id = event.attributes.id
-        name = event.attributes.name
-
-    onAccountNameChanged: (event) ->
-        name = event.attributes.name
+    deactivate: () ->
+        @apply 'AccountDeactivated'
 
 module.exports = Account

@@ -1,8 +1,10 @@
-Command = require './lib/command'
 Bus = require './lib/bus'
+App = require './app/app'
 
-createAccount = new Command 'CreateAccount', { id: 4, name: 'Super Company' }
-changeName = new Command 'ChangeAccountName', {id: 4, name: 'Duper Company' }
+subscribeToEvents = (event, handler) -> Bus.subscribe event, handler
 
-Bus.send createAccount
-Bus.send changeName
+App.setup(subscribeToEvents)
+
+Bus.send ['CreateAccount', { name: 'Super Company' }]
+Bus.send ['ChangeAccountName', { id: 4, name: 'Totally Awesome Incorporated' }]
+Bus.send ['DeactivateAccount', { id: 4 }]

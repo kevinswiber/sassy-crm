@@ -1,18 +1,31 @@
 Event = require './event'
+uuid = require 'node-uuid'
 
 class AggregateRoot
+    id = undefined
+    eventHandlers = {}
+
+    setId: (i) -> id = i
+    getId: () -> id
+
+    @getNewId: () -> uuid()
+
     events: []
 
-    applyEvent: (eventName, options) ->
-        event = new Event eventName, options
-        apply this, event
+    apply: (eventName, attributes, domainHandler) ->
+        attributes or= {}
+        attributes.id = @getId() unless attributes.id
+        event = new Event eventName, attributes
+        applyEvent this, event, domainHandler
 
     clearEvents: () ->
         @events.length = 0
 
-    apply = (obj, event) ->
-        obj.events.push event
-        method_name = 'on' + event.name
-        obj[method_name] event
+    on: (eventName, domainHandler) ->
+        eventHandlers[eventName] = domainHandler
+
+    applyEvent = (that, event) ->
+        that.events.push event
+        eventHandlers[event.name].call that, event if eventHandlers[event.name]
 
 module.exports = AggregateRoot
