@@ -2,18 +2,20 @@ Account = require '../domain/account'
 domainRepository = require './domain_repository'
 
 class CommandHandlers
-    'CreateAccount': (attributes) ->
+    'CreateAccount': (attributes, callback) ->
        account = Account.create attributes
-       domainRepository.save account
+       domainRepository.save 'Account', account, callback
 
-    'ChangeAccountName': (attributes) ->
-        account = domainRepository.find { entity: 'Account', id: attributes.id }
-        account.changeName attributes.name
-        domainRepository.save account
+    'ChangeAccountName': (attributes, callback) ->
+        account = domainRepository.find new Account(), attributes.id,
+            (acc) ->
+                acc.changeName attributes.name
+                domainRepository.save 'Account', acc, callback
 
     'DeactivateAccount': (attributes) ->
-        account = domainRepository.find { entity: 'Account', id: attributes.id }
-        account.deactivate()
-        domainRepository.save account
+        account = domainRepository.find new Account(), attributes.id,
+            (acc) ->
+                acc.deactivate()
+                domainRepository.save 'Account', acc, callback
 
 module.exports = new CommandHandlers()

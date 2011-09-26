@@ -1,10 +1,12 @@
-Bus = require './lib/bus'
+EventBus = require './lib/bus'
+CommandBus = require './lib/command_bus'
 App = require './app/app'
 
-subscribeToEvents = (event, handler) -> Bus.subscribe event, handler
+subscribeToEvents = (event, handler) -> EventBus.subscribe event, handler
 
 App.setup(subscribeToEvents)
 
-Bus.send ['CreateAccount', { name: 'Super Company' }]
-Bus.send ['ChangeAccountName', { id: 4, name: 'Totally Awesome Incorporated' }]
-Bus.send ['DeactivateAccount', { id: 4 }]
+bus = new CommandBus()
+bus.send ['CreateAccount', { name: 'Super Company' }]
+
+bus.commit()

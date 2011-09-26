@@ -16,8 +16,7 @@ class Account extends AggregateRoot
         @on 'AccountDeactivated', (event) ->
             state = 'Deactivated'
 
-    @create: (attributes) ->
-        attributes or= {}
+    @create: (attributes = {}) ->
         attributes.id = @getNewId()
 
         account = new Account()

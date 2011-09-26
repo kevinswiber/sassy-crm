@@ -12,11 +12,10 @@ class AggregateRoot
 
     events: []
 
-    apply: (eventName, attributes, domainHandler) ->
-        attributes or= {}
+    apply: (eventName, attributes = {}) ->
         attributes.id = @getId() unless attributes.id
         event = new Event eventName, attributes
-        applyEvent this, event, domainHandler
+        applyEvent this, event
 
     clearEvents: () ->
         @events.length = 0
