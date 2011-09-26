@@ -1,4 +1,3 @@
-Account = require '../domain/account'
 cradle = require 'cradle'
 
 class DomainRepository
@@ -20,7 +19,7 @@ class DomainRepository
         save = (index, saveCompleted) ->
             event = events[index]
             event.aggregateId = aggregateId
-            event.publishedAt = new Date()
+            event.publishedAt = Date.now()
             event.type = 'Event'
             event.aggregateType = type
 
@@ -37,8 +36,7 @@ class DomainRepository
                 else
                     saveCompleted()
                     return
-
-        save 0, () ->
+        save 0, ->
             entity.clearEvents()
             callback()
 
@@ -49,8 +47,8 @@ class DomainRepository
                 return
             
             docs = docs.sort (a,b) ->
-                return -1 if a.value.published < b.value.published
-                return 1 if a.value.published > b.value.published
+                return -1 if a.value.publishedAt < b.value.publishedAt
+                return 1 if a.value.publishedAt > b.value.publishedAt
                 return 0
 
             aggregate.apply doc.value.name, doc.value.attributes for doc in docs

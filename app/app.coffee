@@ -11,6 +11,7 @@ class App
             repo.save
                 aggregateId: event.attributes.id,
                 name: event.attributes.name,
+                modifiedAt: Date.now()
                 status: event.attributes.status,
                 type: 'report'
                 reportType: 'AccountReport'
