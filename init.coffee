@@ -36,3 +36,7 @@ createViews = ->
             map: (doc) ->
                 if doc.type is 'report'
                     emit {reportType: doc.reportType, aggregateId: doc.aggregateId}, doc
+        byReportType:
+            map: (doc) ->
+                if doc.type is 'report'
+                    emit {reportType: doc.reportType}, doc

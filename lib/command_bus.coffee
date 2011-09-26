@@ -8,7 +8,7 @@ class CommandBus
     send: (command) ->
             commands.push command
 
-    commit: ->
+    commit: (callback = (->)) ->
         commit = (index, commitCompleted) ->
             command = commands[index]
             commandName = command[0]
@@ -24,6 +24,8 @@ class CommandBus
                     return
 
         if commands.length
-            commit 0, () -> commands.length = 0
+            commit 0, () ->
+                commands.length = 0
+                callback()
 
 module.exports = CommandBus

@@ -27,4 +27,38 @@ class ReportingRepository
             report = doc
         return report if report?
 
-module.exports = ReportingRepository
+    find: (key, callback) ->
+        db.view 'reports/byReportType', {key: key}, (err, docs) ->
+            if err?
+                console.log err
+                return
+
+            docs = docs.sort (a,b) ->
+                return -1 if a.value.modifiedAt > b.value.modifiedAt
+                return 1 if a.value.modifiedAt < b.value.modifiedAt
+                return 0
+
+            callback docs
+
+    findByAggregate: (key, callback) ->
+        db.view 'reports/byReportTypeAndAggregateId', {key: key}, (err, docs) ->
+            if err?
+                console.log err
+                return
+
+            docs = docs.sort (a,b) ->
+                return -1 if a.value.modifiedAt > b.value.modifiedAt
+                return 1 if a.value.modifiedAt < b.value.modifiedAt
+                return 0
+
+            callback docs
+
+    update: (id, attributes, callback = ( -> )) ->
+        db.merge id, attributes, (err, res) ->
+            if err?
+                console.log err
+                return
+
+            callback()
+            
+module.exports = new ReportingRepository()
