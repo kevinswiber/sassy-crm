@@ -28,7 +28,7 @@ class DomainRepository
                     console.log err
                     return
 
-                require('./bus').publish event
+                require('./event_bus').publish event
                 nextIndex = index + 1
 
                 if nextIndex < events.length - 1

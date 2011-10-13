@@ -1,0 +1,39 @@
+var utils = require('jezebel/utils');
+var stats;
+var context;
+
+function reloadModule(path) {
+  delete require.cache[path];
+  context.$$ = require(path);
+}
+
+exports.settings = {
+  onStart: function(replSession) {
+    context = replSession.context;
+    stats = {
+      passes: 0,
+      fails: 0,
+      changes: 0
+    };
+  },
+  onPass: function() {
+    stats.passes += 1;
+  },
+  onFail: function() {
+    stats.fails += 1;
+  },
+  onChange: function(path, curr, prev) {
+    stats.changes += 1;
+    if (path.match(/.*\.js$/)) {
+      // load the most recently changed module into the $$ variable in the REPL
+      reloadModule(path);
+    }
+  }
+};
+
+// Run me from the REPL to see your test stats!
+exports.stats = function() {
+  return stats;
+}
+
+exports.files = utils.projectFiles;

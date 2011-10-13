@@ -1,4 +1,4 @@
-EventBus = require '../lib/bus'
+EventBus = require '../lib/event_bus'
 reportingRepository = require '../lib/reporting_repository'
 
 module.exports.setup = ->
