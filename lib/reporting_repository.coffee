@@ -1,15 +1,10 @@
-cradle = require 'cradle'
+dataStrategy = require './data_strategy'
 
 class ReportingRepository
     db = undefined
+    
     constructor: () ->
-        couch = new(cradle.Connection)(
-            "http://localhost",
-            5984,
-            { cache: true, raw: false }
-        )
-
-        db = couch.database 'sassy-crm'
+        db = dataStrategy.connect()
 
     save: (report) ->
         ret = (err, res) ->
