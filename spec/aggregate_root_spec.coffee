@@ -36,6 +36,6 @@ describe 'AggregateRoot', ->
     it 'stores an id', ->
         id = AggregateRoot.getNewId()
         agg = new AggregateRoot()
-        agg.setId id
+        agg.id id
 
-        expect(agg.getId()).toBe(id)
+        expect(agg.id()).toBe(id)

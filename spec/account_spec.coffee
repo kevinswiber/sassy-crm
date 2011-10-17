@@ -10,12 +10,12 @@ describe 'Account', ->
         account = newAccount()
 
     it 'fires an AccountCreated event', ->
-        expect(account.events).toContain(new Event 'AccountCreated', { name: 'Tricky', id: account.getId() })
+        expect(account.events).toContain(new Event 'AccountCreated', { name: 'Tricky', id: account.id() })
 
     it 'fires an AccountNameChanged event', ->
         account.changeName 'Acme'
-        expect(account.events).toContain(new Event 'AccountNameChanged', { name: 'Acme', id: account.getId() })
+        expect(account.events).toContain(new Event 'AccountNameChanged', { name: 'Acme', id: account.id() })
 
     it 'fires an AccountDeactivated event', ->
         account.deactivate()
-        expect(account.events).toContain(new Event 'AccountDeactivated', { id: account.getId() })
+        expect(account.events).toContain(new Event 'AccountDeactivated', { id: account.id() })

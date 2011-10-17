@@ -6,7 +6,7 @@ class Account extends AggregateRoot
 
     constructor: () ->
         @on 'AccountCreated', (event) ->
-            @setId event.attributes.id
+            @id event.attributes.id
             name = event.attributes.name
             state = 'New'
 

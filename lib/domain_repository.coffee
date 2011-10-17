@@ -7,7 +7,7 @@ class DomainRepository
         db = dataStrategy.connect()
 
     save: (type, entity, callback = ( -> )) ->
-        aggregateId = entity.getId()
+        aggregateId = entity.id()
         events = entity.events
 
         save = (index, saveCompleted) ->

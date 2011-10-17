@@ -2,18 +2,19 @@ Event = require './event'
 uuid = require 'node-uuid'
 
 class AggregateRoot
-    id = undefined
+    _id = undefined
     eventHandlers = {}
 
-    setId: (i) -> id = i
-    getId: () -> id
+    id: (value) ->
+        return _id if value == undefined
+        _id = value
 
     @getNewId: () -> uuid()
 
     events: []
 
     apply: (eventName, attributes = {}) ->
-        attributes.id = @getId() unless attributes.id
+        attributes.id = @id() unless attributes.id
         event = new Event eventName, attributes
         applyEvent this, event
 
